@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
         { id: 2, name: "Batata Frita Média", category: "porcao", price: 15.00, desc: "Batatas crocantes com sal e tempero especial.", emoji: "🍟", img: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=400" },
         { id: 3, name: "Coca-Cola 1L", category: "bebida", price: 9.99, desc: "Refrigerante gelado.", emoji: "🥤", img: "https://images.unsplash.com/photo-1554866585-cd94860890b7?w=400" },
         { id: 4, name: "Combo Y2K", category: "combo", price: 34.99, desc: "Hambúrguer + Batata + Coca-Cola.", emoji: "", badge: "Combo", img: "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?w=400" },
-        { id: 5, name: "Pudim", category: "sobremesa", price: 14.99, desc: "Pudim de leite condensado com calda.", emoji: "", img: "https://images.unsplash.com/photo-1528975604071-b4dc52a2d18c?w=400" },
+        { id: 5, name: "Pudim", category: "sobremesa", price: 14.99, desc: "Pudim de leite condensado com calda de caramelo.", emoji: "🍮", img: "https://images.pexels.com/photos/34520971/pexels-photo-34520971.jpeg" },
         { id: 6, name: "Pizza de Pepperoni", category: "pizza", price: 29.99, desc: "Massa artesanal, mussarela e pepperoni.", emoji: "🍕", img: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400" },
         { id: 7, name: "Cheeseburger Clássico", category: "burger", price: 19.99, desc: "Pão, blend 150g, queijo cheddar.", emoji: "🍔", img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d?w=400" },
         { id: 8, name: "Batata Frita Grande", category: "porcao", price: 22.00, desc: "Porção grande com cheddar e bacon.", emoji: "🍟", img: "https://images.unsplash.com/photo-1630384060421-cb20d0e0649d?w=400" },
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
         { id: 13, name: "Onion Rings", category: "porcao", price: 18.99, desc: "Anéis de cebola crocantes.", emoji: "🧅", img: "https://images.unsplash.com/photo-1639024471283-03518883512d?w=400" },
         { id: 14, name: "Suco Natural", category: "bebida", price: 11.99, desc: "Laranja, abacaxi ou maracujá.", emoji: "🧃", img: "https://images.unsplash.com/photo-1613478223719-2ab802602423?w=400" },
         { id: 15, name: "X-Burger Especial", category: "burger", price: 27.99, desc: "Blend 200g, queijo, presunto, ovo.", emoji: "🍔", img: "https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=400" },
-        { id: 16, name: "Açaí 500ml", category: "sobremesa", price: 16.99, desc: "Açaí com granola e banana.", emoji: "🍧", badge: "Popular", img: "https://images.unsplash.com/photo-1590301157890-4810ed352733?w=400" }
+        { id: 16, name: "Açaí 500ml", category: "sobremesa", price: 16.99, desc: "Açaí cremoso com granola, morango, kiwi e chocoballs.", emoji: "🍧", badge: "Popular", img: "https://images.pexels.com/photos/11094181/pexels-photo-11094181.jpeg" }
     ];
 
     let cart = [];
@@ -314,5 +314,71 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     console.log('%c Y2KBite carregado! ', 'background: #c9a84c; color: #0d0805; font-size: 14px; font-weight: bold; padding: 5px;');
+// ==================== MODAL DE DETALHES DO PRODUTO ====================
+const productModal = document.getElementById('productModal');
+const productModalClose = document.getElementById('productModalClose');
+const productModalImg = document.getElementById('productModalImg');
+const productModalName = document.getElementById('productModalName');
+const productModalDesc = document.getElementById('productModalDesc');
+const productModalPrice = document.getElementById('productModalPrice');
+const productModalAdd = document.getElementById('productModalAdd');
 
+// Abrir modal ao clicar no card do produto
+if (menuGrid) {
+    menuGrid.addEventListener('click', function(e) {
+        const menuItem = e.target.closest('.menu-item');
+        if (!menuItem) return;
+        
+        // Evita abrir se clicou no botão "Adicionar"
+        if (e.target.closest('.btn-add')) return;
+        
+        const category = menuItem.getAttribute('data-category');
+        const name = menuItem.querySelector('h3').textContent;
+        const desc = menuItem.querySelector('.menu-desc').textContent;
+        const priceText = menuItem.querySelector('.menu-price').textContent;
+        const img = menuItem.querySelector('img');
+        
+        // Encontrar o produto no menuData
+        const product = menuData.find(p => p.name === name);
+        
+        if (product) {
+            productModalImg.src = product.img;
+            productModalImg.alt = product.name;
+            productModalName.textContent = product.name;
+            productModalDesc.textContent = product.desc;
+            productModalPrice.textContent = `R$ ${product.price.toFixed(2).replace('.', ',')}`;
+            
+            // Configurar botão de adicionar
+            productModalAdd.onclick = function() {
+                addToCart(product.name, product.price);
+                closeProductModal();
+            };
+            
+            productModal.classList.add('active');
+        }
+    });
+}
+
+// Fechar modal
+function closeProductModal() {
+    if (productModal) productModal.classList.remove('active');
+}
+
+if (productModalClose) {
+    productModalClose.addEventListener('click', closeProductModal);
+}
+
+if (productModal) {
+    productModal.addEventListener('click', function(e) {
+        if (e.target === productModal) closeProductModal();
+    });
+}
+
+// Fechar com tecla ESC
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeProductModal();
+        closeCart();
+    }
+});
 });

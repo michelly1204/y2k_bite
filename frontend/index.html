@@ -318,6 +318,27 @@
     <!-- TOAST -->
     <div class="toast" id="toast"></div>
 
+    <!-- MODAL DE DETALHES DO PRODUTO -->
+<div class="modal-overlay" id="productModal">
+    <div class="modal product-modal">
+        <button class="modal-close" id="productModalClose">&times;</button>
+        <div class="product-modal-content">
+            <div class="product-modal-img">
+                <img src="" alt="" id="productModalImg">
+            </div>
+            <div class="product-modal-info">
+                <h2 id="productModalName"></h2>
+                <p class="product-modal-desc" id="productModalDesc"></p>
+                <div class="product-modal-footer">
+                    <span class="product-modal-price" id="productModalPrice"></span>
+                    <button class="btn-add-modal" id="productModalAdd">
+                        <i class="fas fa-plus"></i> Adicionar ao Carrinho
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
     <script src="script.js"></script>
 </body>
 </html>
