@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS pedido_itens (
     FOREIGN KEY (produto_id) REFERENCES produtos(id)
 );
 
-INSERT INTO produtos (nome, categoria, preco, descricao, imagem, emoji, badge) VALUES
+INSERT IGNORE INTO produtos (nome, categoria, preco, descricao, imagem, emoji, badge) VALUES
 ('Hambúrguer Bacon Cheddar', 'burger', 24.99, 'Pão brioche, blend 180g, bacon crocante, cheddar derretido.', 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400', '🍔', 'Mais Pedido'),
 ('Batata Frita Média', 'porcao', 15.00, 'Batatas crocantes com sal e tempero especial.', 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=400', '🍟', NULL),
 ('Coca-Cola 1L', 'bebida', 9.99, 'Refrigerante gelado.', 'https://images.unsplash.com/photo-1554866585-cd94860890b7?w=400', '🥤', NULL),
