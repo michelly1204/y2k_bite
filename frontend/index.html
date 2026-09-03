@@ -31,7 +31,6 @@
             <a href="#entregas" class="nav-item" data-page="entregas">
                 <i class="fas fa-truck"></i><span>Entregas</span>
             </a>
-            <!-- NOVOS LINKS DE AUTENTICAÇÃO -->
             <a href="#login" class="nav-item" data-page="login" id="navLogin">
                 <i class="fas fa-sign-in-alt"></i><span>Entrar</span>
             </a>
@@ -143,7 +142,7 @@
         <!-- ENTREGAS -->
         <section class="page scrollable-page" id="entregas">
             <div class="page-header-cardapio">
-                <h1 class="page-title-decorated">Entregas <span class="star-deco">✦</span></h1>
+                <h1 class="page-title-decorated">Entregas <span class="star-deco"></span></h1>
             </div>
             <div class="entregas-container">
                 <div class="entregas-info">
@@ -162,25 +161,44 @@
                         <div class="cep-status" id="cepStatus"></div>
                     </div>
                 </div>
+
                 <div class="payment-section">
                     <h3><i class="fas fa-credit-card"></i> Formas de Pagamento</h3>
                     <div class="payment-grid">
-                        <div class="payment-card"><i class="fas fa-credit-card"></i><span>Cartão de Crédito</span><small>Na entrega ou online</small></div>
-                        <div class="payment-card"><i class="fas fa-credit-card"></i><span>Cartão de Débito</span><small>Na entrega ou online</small></div>
-                        <div class="payment-card"><i class="fab fa-pix"></i><span>PIX</span><small>Rápido e sem taxa</small></div>
-                        <div class="payment-card"><i class="fas fa-ticket-alt"></i><span>Vale-Refeição</span><small>VR / VA / Sodexo / Alelo</small></div>
-                        <div class="payment-card"><i class="fas fa-money-bill-wave"></i><span>Dinheiro</span><small>Informe o troco</small></div>
+                        <div class="payment-card" data-type="cartao">
+                            <i class="fas fa-credit-card"></i>
+                            <span>Cartão de Crédito</span>
+                            <p class="payment-detail">Visa, Master, Elo e Amex. Parcelamos em até 3x sem juros.</p>
+                        </div>
+                        <div class="payment-card" data-type="cartao">
+                            <i class="fas fa-money-check-alt"></i>
+                            <span>Cartão de Débito</span>
+                            <p class="payment-detail">Pagamento seguro via maquininha ou link digital.</p>
+                        </div>
+                        <div class="payment-card" data-type="pix">
+                            <i class="fas fa-qrcode"></i>
+                            <span>PIX</span>
+                            <p class="payment-detail">Aprovação instantânea! <strong>5% de desconto</strong> no total.</p>
+                        </div>
+                        <div class="payment-card" data-type="cartao">
+                            <i class="fas fa-ticket-alt"></i>
+                            <span>Vale-Refeição</span>
+                            <p class="payment-detail">Aceitamos VR, Sodexo, Alelo e iFood Card.</p>
+                        </div>
+                        <div class="payment-card" data-type="dinheiro">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span>Dinheiro</span>
+                            <p class="payment-detail">Pagamento na entrega ou no estabelecimento.</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- ==================== NOVAS SEÇÕES DE AUTENTICAÇÃO ==================== -->
-        
         <!-- LOGIN -->
         <section class="page scrollable-page" id="login">
             <div class="page-header-cardapio">
-                <h1 class="page-title-decorated">Entrar <span class="star-deco">✦</span></h1>
+                <h1 class="page-title-decorated">Entrar <span class="star-deco"></span></h1>
             </div>
             <div class="auth-container">
                 <div class="auth-card">
@@ -283,8 +301,6 @@
             </div>
         </section>
 
-        <!-- ==================== FIM DAS NOVAS SEÇÕES ==================== -->
-
         <!-- CONTATOS -->
         <section class="page scrollable-page" id="contatos">
             <div class="page-header-cardapio">
@@ -300,15 +316,15 @@
                         <div class="contact-icon instagram"><i class="fab fa-instagram"></i></div>
                         <h3>Instagram</h3><p>@Y2K_Bites</p>
                     </a>
-                    <a href="https://wa.me/5511982151212" target="_blank" class="contact-card">
+                    <a href="https://wa.me/5511999992222" target="_blank" class="contact-card">
                         <div class="contact-icon whatsapp"><i class="fab fa-whatsapp"></i></div>
-                        <h3>WhatsApp</h3><p>55+ 11 98215-1212</p>
+                        <h3>WhatsApp</h3><p>55+ 11 99999-2222</p>
                     </a>
                     <a href="mailto:Y2K.Bites@gmail.com" class="contact-card">
                         <div class="contact-icon email"><i class="fas fa-envelope"></i></div>
                         <h3>E-mail</h3><p>Y2K.Bites@gmail.com</p>
                     </a>
-                    <a href="tel:+5511982151212" class="contact-card">
+                    <a href="tel:+5511999992222" class="contact-card">
                         <div class="contact-icon phone"><i class="fas fa-phone-alt"></i></div>
                         <h3>Telefone</h3><p>55+ 11 98215-1212</p>
                     </a>
@@ -350,9 +366,6 @@
         </div>
     </div>
 
-    <!-- TOAST -->
-    <div class="toast" id="toast"></div>
-
     <!-- MODAL DE DETALHES DO PRODUTO -->
     <div class="modal-overlay" id="productModal">
         <div class="modal product-modal">
@@ -374,6 +387,90 @@
             </div>
         </div>
     </div>
+
+    <!-- MODAL DE PAGAMENTO (CARTÃO/VR) -->
+    <div class="modal-overlay" id="modalPagamentoCartao">
+        <div class="modal">
+            <button class="modal-close" onclick="fecharModalPagamento('modalPagamentoCartao')">&times;</button>
+            <h2><i class="fas fa-credit-card"></i> Dados do Pagamento</h2>
+            <p style="text-align: center; color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.9rem;">Ambiente seguro (Simulação)</p>
+            
+            <form id="formCartao" class="auth-form">
+                <div class="form-group">
+                    <label>Número do Cartão</label>
+                    <input type="text" placeholder="0000 0000 0000 0000" maxlength="19" required>
+                </div>
+                <div class="form-group">
+                    <label>Nome no Cartão</label>
+                    <input type="text" placeholder="COMO NO CARTAO" required>
+                </div>
+                <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label>Validade</label>
+                        <input type="text" placeholder="MM/AA" maxlength="5" required>
+                    </div>
+                    <div class="form-group">
+                        <label>CVV</label>
+                        <input type="text" placeholder="123" maxlength="4" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary btn-large btn-full">
+                    <i class="fas fa-lock"></i> Pagar com Segurança
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL DE PAGAMENTO (PIX) -->
+    <div class="modal-overlay" id="modalPagamentoPix">
+        <div class="modal">
+            <button class="modal-close" onclick="fecharModalPagamento('modalPagamentoPix')">&times;</button>
+            <h2><i class="fas fa-qrcode"></i> Pagamento via PIX</h2>
+            
+            <div style="text-align: center; margin: 1.5rem 0;">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=Y2KBite-Pagamento-Ficticio-12345" 
+                     alt="QR Code PIX" 
+                     style="border: 4px solid var(--accent-gold); border-radius: 12px; padding: 8px; background: white;">
+            </div>
+
+            <div class="form-group">
+                <label>Chave PIX (Copia e Cola)</label>
+                <div class="pix-key-container">
+                    <input type="text" value="y2kbite@pix-ficticio.com.br" readonly id="modalPixKey">
+                    <button type="button" class="btn-copy-pix" id="btnCopyModalPix"><i class="fas fa-copy"></i></button>
+                </div>
+            </div>
+            <p style="text-align: center; color: var(--text-secondary); font-size: 0.85rem; margin-top: 1rem;">
+                <i class="fas fa-info-circle"></i> O pagamento é confirmado em até 5 segundos.
+            </p>
+        </div>
+    </div>
+
+    <!-- MODAL DE PAGAMENTO (DINHEIRO) -->
+    <div class="modal-overlay" id="modalPagamentoDinheiro">
+        <div class="modal">
+            <button class="modal-close" onclick="fecharModalPagamento('modalPagamentoDinheiro')">&times;</button>
+            <h2><i class="fas fa-money-bill-wave"></i> Pagamento em Dinheiro</h2>
+            
+            <div style="text-align: center; padding: 1rem 0;">
+                <i class="fas fa-hand-holding-usd" style="font-size: 4rem; color: var(--accent-gold); margin-bottom: 1rem;"></i>
+                <p style="color: var(--text-primary); font-size: 1.05rem; line-height: 1.6; margin-bottom: 1rem;">
+                    O pagamento será realizado diretamente com o <strong>entregador</strong> ou no <strong>estabelecimento</strong> no momento da retirada.
+                </p>
+                <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
+                    <i class="fas fa-lightbulb" style="color: var(--accent-gold);"></i> <strong>Dica:</strong> Por favor, tenha o valor exato ou avise sobre o troco necessário na observação do seu pedido.
+                </p>
+            </div>
+            
+            <button class="btn-primary btn-large btn-full" onclick="fecharModalPagamento('modalPagamentoDinheiro')">
+                <i class="fas fa-check"></i> Entendi
+            </button>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast"></div>
+
     <script src="script.js"></script>
 </body>
 </html>
