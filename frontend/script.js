@@ -378,6 +378,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const btnLogout = document.getElementById('btnLogout');
     const goToRegister = document.getElementById('goToRegister');
     const goToLogin = document.getElementById('goToLogin');
+    const apiBaseUrl = window.location.protocol === 'file:'
+        ? 'http://localhost:3000'
+        : window.location.origin;
 
     function checkAuthState() {
         const token = localStorage.getItem('y2kbite_token');
@@ -414,7 +417,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const senha = document.getElementById('loginSenha').value;
 
             try {
-                const res = await fetch('http://localhost:3000/api/auth/login', {
+                const res = await fetch(`${apiBaseUrl}/api/auth/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, senha })
@@ -447,7 +450,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const endereco = document.getElementById('regEndereco').value;
 
             try {
-                const res = await fetch('http://localhost:3000/api/auth/register', {
+                const res = await fetch(`${apiBaseUrl}/api/auth/register`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ nome, email, senha, telefone, endereco })
@@ -478,7 +481,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const endereco = document.getElementById('perfilEndereco').value;
 
             try {
-                const res = await fetch('http://localhost:3000/api/auth/profile', {
+                const res = await fetch(`${apiBaseUrl}/api/auth/profile`, {
                     method: 'PUT',
                     headers: { 
                         'Content-Type': 'application/json',

@@ -1,17 +1,18 @@
 const mysql = require('mysql2/promise');
 const fs = require('fs');
 const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 const config = {
-    host: 'localhost',
-    port: 3308,
-    user: 'root',
-    password: ''
+    host: process.env.DB_HOST || 'localhost',
+    port: Number(process.env.DB_PORT) || 3306,
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || ''
 };
 
 const pool = mysql.createPool({
     ...config,
-    database: 'y2kbite_db',
+    database: process.env.DB_NAME || 'y2kbite_db',
     charset: 'utf8mb4',
     waitForConnections: true,
     connectionLimit: 10

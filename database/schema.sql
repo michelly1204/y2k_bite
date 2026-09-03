@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS clientes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE,
+    senha VARCHAR(255) NOT NULL,
     telefone VARCHAR(20),
     endereco TEXT,
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -54,3 +55,5 @@ INSERT IGNORE INTO produtos (nome, categoria, preco, descricao, imagem, emoji, b
 
 CREATE INDEX idx_categoria ON produtos(categoria);
 CREATE INDEX idx_status ON pedidos(status);
+
+ALTER TABLE clientes ADD COLUMN IF NOT EXISTS senha VARCHAR(255) NULL;
