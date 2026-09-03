@@ -10,24 +10,29 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '..', 'frontend')));
 
+// Importar rotas
 const produtosRoutes = require('./routes/produtos');
 const pedidosRoutes = require('./routes/pedidos');
-const db = require('./database');
+const authRoutes = require('./routes/auth'); // <--- NOVO
 
+// Usar rotas
 app.use('/api/produtos', produtosRoutes);
 app.use('/api/pedidos', pedidosRoutes);
+app.use('/api/auth', authRoutes); // <--- NOVO
 
 app.get('/api', (req, res) => {
     res.json({ 
         message: '🍔 API Y2KBite funcionando!',
         endpoints: {
             produtos: '/api/produtos',
-            pedidos: '/api/pedidos'
+            pedidos: '/api/pedidos',
+            auth: '/api/auth' // <--- NOVO
         }
     });
 });
 
 const PORT = process.env.PORT || 3000;
+const db = require('./database');
 
 db.ready
     .then(() => {

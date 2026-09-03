@@ -1,10 +1,10 @@
 document.addEventListener('DOMContentLoaded', function() {
 
     const menuData = [
-        { id: 1, name: "Hambúrguer Bacon Cheddar", category: "burger", price: 24.99, desc: "Pão brioche, blend 180g, bacon crocante, cheddar derretido.", emoji: "", badge: "Mais Pedido", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400" },
+        { id: 1, name: "Hambúrguer Bacon Cheddar", category: "burger", price: 24.99, desc: "Pão brioche, blend 180g, bacon crocante, cheddar derretido.", emoji: "🍔", badge: "Mais Pedido", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400" },
         { id: 2, name: "Batata Frita Média", category: "porcao", price: 15.00, desc: "Batatas crocantes com sal e tempero especial.", emoji: "🍟", img: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=400" },
         { id: 3, name: "Coca-Cola 1L", category: "bebida", price: 9.99, desc: "Refrigerante gelado.", emoji: "🥤", img: "https://images.unsplash.com/photo-1554866585-cd94860890b7?w=400" },
-        { id: 4, name: "Combo Y2K", category: "combo", price: 34.99, desc: "Hambúrguer + Batata + Coca-Cola.", emoji: "", badge: "Combo", img: "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?w=400" },
+        { id: 4, name: "Combo Y2K", category: "combo", price: 34.99, desc: "Hambúrguer + Batata + Coca-Cola.", emoji: "🍔", badge: "Combo", img: "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?w=400" },
         { id: 5, name: "Pudim", category: "sobremesa", price: 14.99, desc: "Pudim de leite condensado com calda de caramelo.", emoji: "🍮", img: "https://images.pexels.com/photos/34520971/pexels-photo-34520971.jpeg" },
         { id: 6, name: "Pizza de Pepperoni", category: "pizza", price: 29.99, desc: "Massa artesanal, mussarela e pepperoni.", emoji: "🍕", img: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400" },
         { id: 7, name: "Cheeseburger Clássico", category: "burger", price: 19.99, desc: "Pão, blend 150g, queijo cheddar.", emoji: "🍔", img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d?w=400" },
@@ -227,7 +227,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const cartModalClose = document.getElementById('cartModalClose');
     const cartSidebarBtn = document.getElementById('cartSidebarBtn');
     const mobileCartBtn = document.getElementById('mobileCartBtn');
-    const btnCheckout = document.getElementById('btnCheckout');
+    const btnCheckoutGlobal = document.getElementById('btnCheckout');
 
     function openCart() { if (cartModal) cartModal.classList.add('active'); }
     function closeCart() { if (cartModal) cartModal.classList.remove('active'); }
@@ -241,8 +241,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    if (btnCheckout) {
-        btnCheckout.addEventListener('click', function() {
+    if (btnCheckoutGlobal) {
+        btnCheckoutGlobal.addEventListener('click', function() {
             if (cart.length === 0) return;
             let msg = '🍔 *Pedido Y2KBite*\n\n';
             cart.forEach(item => {
@@ -250,7 +250,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
             msg += `\n💰 *Total: R$ ${total.toFixed(2).replace('.', ',')}*`;
-            window.open(`https://wa.me/5511999992222?text=${encodeURIComponent(msg)}`, '_blank');
+            window.open(`https://wa.me/5511982151212?text=${encodeURIComponent(msg)}`, '_blank');
         });
     }
 
@@ -314,71 +314,216 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     console.log('%c Y2KBite carregado! ', 'background: #c9a84c; color: #0d0805; font-size: 14px; font-weight: bold; padding: 5px;');
-// ==================== MODAL DE DETALHES DO PRODUTO ====================
-const productModal = document.getElementById('productModal');
-const productModalClose = document.getElementById('productModalClose');
-const productModalImg = document.getElementById('productModalImg');
-const productModalName = document.getElementById('productModalName');
-const productModalDesc = document.getElementById('productModalDesc');
-const productModalPrice = document.getElementById('productModalPrice');
-const productModalAdd = document.getElementById('productModalAdd');
 
-// Abrir modal ao clicar no card do produto
-if (menuGrid) {
-    menuGrid.addEventListener('click', function(e) {
-        const menuItem = e.target.closest('.menu-item');
-        if (!menuItem) return;
-        
-        // Evita abrir se clicou no botão "Adicionar"
-        if (e.target.closest('.btn-add')) return;
-        
-        const category = menuItem.getAttribute('data-category');
-        const name = menuItem.querySelector('h3').textContent;
-        const desc = menuItem.querySelector('.menu-desc').textContent;
-        const priceText = menuItem.querySelector('.menu-price').textContent;
-        const img = menuItem.querySelector('img');
-        
-        // Encontrar o produto no menuData
-        const product = menuData.find(p => p.name === name);
-        
-        if (product) {
-            productModalImg.src = product.img;
-            productModalImg.alt = product.name;
-            productModalName.textContent = product.name;
-            productModalDesc.textContent = product.desc;
-            productModalPrice.textContent = `R$ ${product.price.toFixed(2).replace('.', ',')}`;
+    // ==================== MODAL DE DETALHES DO PRODUTO ====================
+    const productModal = document.getElementById('productModal');
+    const productModalClose = document.getElementById('productModalClose');
+    const productModalImg = document.getElementById('productModalImg');
+    const productModalName = document.getElementById('productModalName');
+    const productModalDesc = document.getElementById('productModalDesc');
+    const productModalPrice = document.getElementById('productModalPrice');
+    const productModalAdd = document.getElementById('productModalAdd');
+
+    if (menuGrid) {
+        menuGrid.addEventListener('click', function(e) {
+            const menuItem = e.target.closest('.menu-item');
+            if (!menuItem || e.target.closest('.btn-add')) return;
             
-            // Configurar botão de adicionar
-            productModalAdd.onclick = function() {
-                addToCart(product.name, product.price);
-                closeProductModal();
-            };
+            const name = menuItem.querySelector('h3').textContent;
+            const product = menuData.find(p => p.name === name);
             
-            productModal.classList.add('active');
+            if (product && productModalImg && productModalName) {
+                productModalImg.src = product.img;
+                productModalName.textContent = product.name;
+                productModalDesc.textContent = product.desc;
+                productModalPrice.textContent = `R$ ${product.price.toFixed(2).replace('.', ',')}`;
+                
+                productModalAdd.onclick = () => {
+                    addToCart(product.name, product.price);
+                    productModal.classList.remove('active');
+                };
+                
+                productModal.classList.add('active');
+            }
+        });
+    }
+
+    function closeProductModal() {
+        if (productModal) productModal.classList.remove('active');
+    }
+
+    if (productModalClose) {
+        productModalClose.addEventListener('click', closeProductModal);
+    }
+
+    if (productModal) {
+        productModal.addEventListener('click', function(e) {
+            if (e.target === productModal) closeProductModal();
+        });
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeProductModal();
+            closeCart();
         }
     });
-}
 
-// Fechar modal
-function closeProductModal() {
-    if (productModal) productModal.classList.remove('active');
-}
+    // ==================== NOVO: LÓGICA DE AUTENTICAÇÃO ====================
+    const navLogin = document.getElementById('navLogin');
+    const navPerfil = document.getElementById('navPerfil');
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+    const perfilForm = document.getElementById('perfilForm');
+    const btnLogout = document.getElementById('btnLogout');
+    const goToRegister = document.getElementById('goToRegister');
+    const goToLogin = document.getElementById('goToLogin');
 
-if (productModalClose) {
-    productModalClose.addEventListener('click', closeProductModal);
-}
+    function checkAuthState() {
+        const token = localStorage.getItem('y2kbite_token');
+        const user = JSON.parse(localStorage.getItem('y2kbite_user') || '{}');
 
-if (productModal) {
-    productModal.addEventListener('click', function(e) {
-        if (e.target === productModal) closeProductModal();
-    });
-}
-
-// Fechar com tecla ESC
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        closeProductModal();
-        closeCart();
+        if (token && user.nome) {
+            if (navLogin) navLogin.style.display = 'none';
+            if (navPerfil) navPerfil.style.display = 'flex';
+            updateProfileUI(user);
+        } else {
+            if (navLogin) navLogin.style.display = 'flex';
+            if (navPerfil) navPerfil.style.display = 'none';
+        }
     }
-});
-});
+
+    function updateProfileUI(user) {
+        const nomeDisplay = document.getElementById('perfilNomeDisplay');
+        const emailDisplay = document.getElementById('perfilEmailDisplay');
+        const nomeInput = document.getElementById('perfilNome');
+        const telefoneInput = document.getElementById('perfilTelefone');
+        const enderecoInput = document.getElementById('perfilEndereco');
+
+        if (nomeDisplay) nomeDisplay.textContent = user.nome || 'Usuário';
+        if (emailDisplay) emailDisplay.textContent = user.email || '...';
+        if (nomeInput) nomeInput.value = user.nome || '';
+        if (telefoneInput) telefoneInput.value = user.telefone || '';
+        if (enderecoInput) enderecoInput.value = user.endereco || '';
+    }
+
+    if (loginForm) {
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const senha = document.getElementById('loginSenha').value;
+
+            try {
+                const res = await fetch('http://localhost:3000/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, senha })
+                });
+                const data = await res.json();
+
+                if (res.ok) {
+                    localStorage.setItem('y2kbite_token', data.token);
+                    localStorage.setItem('y2kbite_user', JSON.stringify(data.user));
+                    showToast('✅ Login realizado com sucesso!');
+                    checkAuthState();
+                    showPage('home');
+                    loginForm.reset();
+                } else {
+                    showToast(`❌ ${data.error}`);
+                }
+            } catch (err) {
+                showToast('❌ Erro de conexão com o servidor.');
+            }
+        });
+    }
+
+    if (registerForm) {
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const nome = document.getElementById('regNome').value;
+            const email = document.getElementById('regEmail').value;
+            const senha = document.getElementById('regSenha').value;
+            const telefone = document.getElementById('regTelefone').value;
+            const endereco = document.getElementById('regEndereco').value;
+
+            try {
+                const res = await fetch('http://localhost:3000/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nome, email, senha, telefone, endereco })
+                });
+                const data = await res.json();
+
+                if (res.ok) {
+                    showToast('✅ Conta criada! Faça login agora.');
+                    showPage('login');
+                    registerForm.reset();
+                } else {
+                    showToast(`❌ ${data.error}`);
+                }
+            } catch (err) {
+                showToast('❌ Erro de conexão com o servidor.');
+            }
+        });
+    }
+
+    if (perfilForm) {
+        perfilForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const token = localStorage.getItem('y2kbite_token');
+            if (!token) return;
+
+            const nome = document.getElementById('perfilNome').value;
+            const telefone = document.getElementById('perfilTelefone').value;
+            const endereco = document.getElementById('perfilEndereco').value;
+
+            try {
+                const res = await fetch('http://localhost:3000/api/auth/profile', {
+                    method: 'PUT',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': token 
+                    },
+                    body: JSON.stringify({ nome, telefone, endereco })
+                });
+                const data = await res.json();
+
+                if (res.ok) {
+                    const user = JSON.parse(localStorage.getItem('y2kbite_user'));
+                    user.nome = nome;
+                    user.telefone = telefone;
+                    user.endereco = endereco;
+                    localStorage.setItem('y2kbite_user', JSON.stringify(user));
+                    
+                    updateProfileUI(user);
+                    showToast('✅ Perfil atualizado com sucesso!');
+                } else {
+                    showToast(`❌ ${data.error}`);
+                }
+            } catch (err) {
+                showToast('❌ Erro ao atualizar perfil.');
+            }
+        });
+    }
+
+    if (btnLogout) {
+        btnLogout.addEventListener('click', () => {
+            localStorage.removeItem('y2kbite_token');
+            localStorage.removeItem('y2kbite_user');
+            showToast('👋 Você saiu da conta.');
+            checkAuthState();
+            showPage('home');
+        });
+    }
+
+    if (goToRegister) {
+        goToRegister.addEventListener('click', (e) => { e.preventDefault(); showPage('cadastro'); });
+    }
+    if (goToLogin) {
+        goToLogin.addEventListener('click', (e) => { e.preventDefault(); showPage('login'); });
+    }
+
+    // Inicializa o estado de auth ao carregar a página
+    checkAuthState();
+
+}); // Fim do DOMContentLoaded
