@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Y2KBite - Just Vibes.</title>
     <link rel="stylesheet" href="style.css">
+    <!-- LEAFLET CSS (MAPA) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -17,31 +19,21 @@
             <h1>Y2K<span>Bite</span></h1>
             <p class="tagline">Just Vibes. ✦</p>
         </div>
-
         <nav class="sidebar-nav">
-            <a href="#home" class="nav-item active" data-page="home">
-                <i class="fas fa-home"></i><span>Início</span>
-            </a>
-            <a href="#cardapio" class="nav-item" data-page="cardapio">
-                <i class="fas fa-utensils"></i><span>Cardápio</span>
-            </a>
-            <a href="#sobre" class="nav-item" data-page="sobre">
-                <i class="fas fa-star"></i><span>Sobre Nós</span>
-            </a>
-            <a href="#entregas" class="nav-item" data-page="entregas">
-                <i class="fas fa-truck"></i><span>Entregas</span>
-            </a>
-            <a href="#login" class="nav-item" data-page="login" id="navLogin">
-                <i class="fas fa-sign-in-alt"></i><span>Entrar</span>
-            </a>
-            <a href="#perfil" class="nav-item" data-page="perfil" id="navPerfil" style="display: none;">
-                <i class="fas fa-user"></i><span>Meu Perfil</span>
-            </a>
-            <a href="#contatos" class="nav-item" data-page="contatos">
-                <i class="fas fa-phone"></i><span>Contatos</span>
-            </a>
+            <a href="#home" class="nav-item active" data-page="home"><i class="fas fa-home"></i><span>Início</span></a>
+            <a href="#cardapio" class="nav-item" data-page="cardapio"><i class="fas fa-utensils"></i><span>Cardápio</span></a>
+            <a href="#sobre" class="nav-item" data-page="sobre"><i class="fas fa-star"></i><span>Sobre Nós</span></a>
+            <a href="#entregas" class="nav-item" data-page="entregas"><i class="fas fa-truck"></i><span>Entregas</span></a>
+            <a href="#login" class="nav-item" data-page="login" id="navLogin"><i class="fas fa-sign-in-alt"></i><span>Entrar</span></a>
+            <a href="#perfil" class="nav-item" data-page="perfil" id="navPerfil" style="display: none;"><i class="fas fa-user"></i><span>Meu Perfil</span></a>
+            <a href="#contatos" class="nav-item" data-page="contatos"><i class="fas fa-phone"></i><span>Contatos</span></a>
         </nav>
-
+        <div class="theme-toggle-container">
+            <button class="theme-toggle" id="themeToggle" title="Alternar tema">
+                <i class="fas fa-moon" id="themeIcon"></i>
+                <span id="themeText">Modo Claro</span>
+            </button>
+        </div>
         <div class="sidebar-cart">
             <button class="cart-sidebar-btn" id="cartSidebarBtn">
                 <i class="fas fa-shopping-bag"></i>
@@ -70,7 +62,7 @@
                 <div class="hero-overlay"></div>
                 <div class="hero-decorations">
                     <span class="star star-1">✦</span><span class="star star-2">★</span>
-                    <span class="star star-3">✧</span><span class="star star-4">✦</span><span class="star star-5">★</span>
+                    <span class="star star-3"></span><span class="star star-4">✦</span><span class="star star-5">★</span>
                 </div>
                 <div class="hero-content">
                     <h1 class="hero-title">Y2K<span class="accent">Bite</span></h1>
@@ -142,20 +134,16 @@
         <!-- ENTREGAS -->
         <section class="page scrollable-page" id="entregas">
             <div class="page-header-cardapio">
-                <h1 class="page-title-decorated">Entregas <span class="star-deco"></span></h1>
+                <h1 class="page-title-decorated">Entregas <span class="star-deco">✦</span></h1>
             </div>
             <div class="entregas-container">
-                <div class="entregas-info">
-                    <p>Preparado para receber o melhor da Y2KBite direto no conforto da sua casa? Nosso serviço de delivery foi pensado para garantir praticidade, agilidade e aquela nostalgia deliciosa sem você precisar sair do sofá.</p>
-                    <p>Entregamos em toda a região e bairros próximos. Basta inserir seu CEP na hora do pedido para conferir a disponibilidade.</p>
-                    <p>Seus hambúrgueres e combos chegam quentinhos em um prazo médio de <strong>30 a 50 minutos</strong>.</p>
-                </div>
                 <div class="cep-section">
-                    <h3><i class="fas fa-map-marker-alt"></i> Verifique sua região</h3>
+                    <h3><i class="fas fa-map-marker-alt"></i> Rastrear meu Pedido</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.9rem;">Digite seu CEP para ver onde sua entrega está agora.</p>
                     <div class="search-box cep-box">
                         <i class="fas fa-search"></i>
                         <input type="text" id="cepInput" placeholder="Digite seu CEP..." maxlength="9">
-                        <button class="btn-primary" id="btnCep">Verificar</button>
+                        <button class="btn-primary" id="btnCep">Rastrear</button>
                     </div>
                     <div class="cep-result" id="cepResult" style="display:none;">
                         <div class="cep-status" id="cepStatus"></div>
@@ -166,31 +154,31 @@
                     <h3><i class="fas fa-credit-card"></i> Formas de Pagamento</h3>
                     <div class="payment-grid">
                         <div class="payment-card" data-type="cartao">
-                            <i class="fas fa-credit-card"></i>
-                            <span>Cartão de Crédito</span>
+                            <i class="fas fa-credit-card"></i><span>Cartão de Crédito</span>
                             <p class="payment-detail">Visa, Master, Elo e Amex. Parcelamos em até 3x sem juros.</p>
                         </div>
                         <div class="payment-card" data-type="cartao">
-                            <i class="fas fa-money-check-alt"></i>
-                            <span>Cartão de Débito</span>
+                            <i class="fas fa-money-check-alt"></i><span>Cartão de Débito</span>
                             <p class="payment-detail">Pagamento seguro via maquininha ou link digital.</p>
                         </div>
                         <div class="payment-card" data-type="pix">
-                            <i class="fas fa-qrcode"></i>
-                            <span>PIX</span>
+                            <i class="fas fa-qrcode"></i><span>PIX</span>
                             <p class="payment-detail">Aprovação instantânea! <strong>5% de desconto</strong> no total.</p>
                         </div>
                         <div class="payment-card" data-type="cartao">
-                            <i class="fas fa-ticket-alt"></i>
-                            <span>Vale-Refeição</span>
+                            <i class="fas fa-ticket-alt"></i><span>Vale-Refeição</span>
                             <p class="payment-detail">Aceitamos VR, Sodexo, Alelo e iFood Card.</p>
                         </div>
                         <div class="payment-card" data-type="dinheiro">
-                            <i class="fas fa-money-bill-wave"></i>
-                            <span>Dinheiro</span>
+                            <i class="fas fa-money-bill-wave"></i><span>Dinheiro</span>
                             <p class="payment-detail">Pagamento na entrega ou no estabelecimento.</p>
                         </div>
                     </div>
+                </div>
+
+                <div class="meus-pedidos-section" id="meusPedidosSection" style="display: none;">
+                    <h3><i class="fas fa-history"></i> Meus Pedidos Recentes</h3>
+                    <div class="pedidos-list" id="pedidosList"></div>
                 </div>
             </div>
         </section>
@@ -198,27 +186,17 @@
         <!-- LOGIN -->
         <section class="page scrollable-page" id="login">
             <div class="page-header-cardapio">
-                <h1 class="page-title-decorated">Entrar <span class="star-deco"></span></h1>
+                <h1 class="page-title-decorated">Entrar <span class="star-deco">✦</span></h1>
             </div>
             <div class="auth-container">
                 <div class="auth-card">
                     <h2>Bem-vindo de volta!</h2>
                     <p class="auth-subtitle">Acesse sua conta Y2KBite</p>
                     <form id="loginForm" class="auth-form">
-                        <div class="form-group">
-                            <label for="loginEmail">Email</label>
-                            <input type="email" id="loginEmail" placeholder="seu@email.com" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="loginSenha">Senha</label>
-                            <input type="password" id="loginSenha" placeholder="Sua senha" required>
-                        </div>
-                        <button type="submit" class="btn-primary btn-large btn-full">
-                            <i class="fas fa-sign-in-alt"></i> Entrar
-                        </button>
-                        <div class="auth-footer">
-                            <p>Não tem conta? <a href="#" id="goToRegister">Cadastre-se</a></p>
-                        </div>
+                        <div class="form-group"><label for="loginEmail">Email</label><input type="email" id="loginEmail" placeholder="seu@email.com" required></div>
+                        <div class="form-group"><label for="loginSenha">Senha</label><input type="password" id="loginSenha" placeholder="Sua senha" required></div>
+                        <button type="submit" class="btn-primary btn-large btn-full"><i class="fas fa-sign-in-alt"></i> Entrar</button>
+                        <div class="auth-footer"><p>Não tem conta? <a href="#" id="goToRegister">Cadastre-se</a></p></div>
                     </form>
                 </div>
             </div>
@@ -227,39 +205,20 @@
         <!-- CADASTRO -->
         <section class="page scrollable-page" id="cadastro">
             <div class="page-header-cardapio">
-                <h1 class="page-title-decorated">Criar Conta <span class="star-deco">✦</span></h1>
+                <h1 class="page-title-decorated">Criar Conta <span class="star-deco"></span></h1>
             </div>
             <div class="auth-container">
                 <div class="auth-card">
                     <h2>Junte-se à Y2KBite!</h2>
                     <p class="auth-subtitle">Crie sua conta e peça com facilidade</p>
                     <form id="registerForm" class="auth-form">
-                        <div class="form-group">
-                            <label for="regNome">Nome completo</label>
-                            <input type="text" id="regNome" placeholder="Seu nome" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="regEmail">Email</label>
-                            <input type="email" id="regEmail" placeholder="seu@email.com" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="regSenha">Senha</label>
-                            <input type="password" id="regSenha" placeholder="Mínimo 6 caracteres" required minlength="6">
-                        </div>
-                        <div class="form-group">
-                            <label for="regTelefone">Telefone (opcional)</label>
-                            <input type="tel" id="regTelefone" placeholder="(11) 99999-9999">
-                        </div>
-                        <div class="form-group">
-                            <label for="regEndereco">Endereço (opcional)</label>
-                            <input type="text" id="regEndereco" placeholder="Rua, número, bairro">
-                        </div>
-                        <button type="submit" class="btn-primary btn-large btn-full">
-                            <i class="fas fa-user-plus"></i> Cadastrar
-                        </button>
-                        <div class="auth-footer">
-                            <p>Já tem conta? <a href="#" id="goToLogin">Faça login</a></p>
-                        </div>
+                        <div class="form-group"><label for="regNome">Nome completo</label><input type="text" id="regNome" placeholder="Seu nome" required></div>
+                        <div class="form-group"><label for="regEmail">Email</label><input type="email" id="regEmail" placeholder="seu@email.com" required></div>
+                        <div class="form-group"><label for="regSenha">Senha</label><input type="password" id="regSenha" placeholder="Mínimo 6 caracteres" required minlength="6"></div>
+                        <div class="form-group"><label for="regTelefone">Telefone (opcional)</label><input type="tel" id="regTelefone" placeholder="(11) 99999-9999"></div>
+                        <div class="form-group"><label for="regEndereco">Endereço (opcional)</label><input type="text" id="regEndereco" placeholder="Rua, número, bairro"></div>
+                        <button type="submit" class="btn-primary btn-large btn-full"><i class="fas fa-user-plus"></i> Cadastrar</button>
+                        <div class="auth-footer"><p>Já tem conta? <a href="#" id="goToLogin">Faça login</a></p></div>
                     </form>
                 </div>
             </div>
@@ -278,30 +237,17 @@
                         <p id="perfilEmailDisplay" class="perfil-email">...</p>
                     </div>
                     <form id="perfilForm" class="auth-form">
-                        <div class="form-group">
-                            <label for="perfilNome">Nome</label>
-                            <input type="text" id="perfilNome" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="perfilTelefone">Telefone</label>
-                            <input type="tel" id="perfilTelefone">
-                        </div>
-                        <div class="form-group">
-                            <label for="perfilEndereco">Endereço</label>
-                            <input type="text" id="perfilEndereco">
-                        </div>
-                        <button type="submit" class="btn-primary btn-large btn-full">
-                            <i class="fas fa-save"></i> Salvar Alterações
-                        </button>
+                        <div class="form-group"><label for="perfilNome">Nome</label><input type="text" id="perfilNome" required></div>
+                        <div class="form-group"><label for="perfilTelefone">Telefone</label><input type="tel" id="perfilTelefone"></div>
+                        <div class="form-group"><label for="perfilEndereco">Endereço</label><input type="text" id="perfilEndereco"></div>
+                        <button type="submit" class="btn-primary btn-large btn-full"><i class="fas fa-save"></i> Salvar Alterações</button>
                     </form>
-                    <button class="btn-logout" id="btnLogout">
-                        <i class="fas fa-sign-out-alt"></i> Sair da Conta
-                    </button>
+                    <button class="btn-logout" id="btnLogout"><i class="fas fa-sign-out-alt"></i> Sair da Conta</button>
                 </div>
             </div>
         </section>
 
-        <!-- CONTATOS -->
+        <!-- CONTATOS (SEM BLOQUEIO VISUAL, APENAS VALIDAÇÃO NO JS) -->
         <section class="page scrollable-page" id="contatos">
             <div class="page-header-cardapio">
                 <h1 class="page-title-decorated">Contatos <span class="star-deco">✦</span></h1>
@@ -371,68 +317,44 @@
         <div class="modal product-modal">
             <button class="modal-close" id="productModalClose">&times;</button>
             <div class="product-modal-content">
-                <div class="product-modal-img">
-                    <img src="" alt="" id="productModalImg">
-                </div>
+                <div class="product-modal-img"><img src="" alt="" id="productModalImg"></div>
                 <div class="product-modal-info">
                     <h2 id="productModalName"></h2>
                     <p class="product-modal-desc" id="productModalDesc"></p>
                     <div class="product-modal-footer">
                         <span class="product-modal-price" id="productModalPrice"></span>
-                        <button class="btn-add-modal" id="productModalAdd">
-                            <i class="fas fa-plus"></i> Adicionar ao Carrinho
-                        </button>
+                        <button class="btn-add-modal" id="productModalAdd"><i class="fas fa-plus"></i> Adicionar ao Carrinho</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- MODAL DE PAGAMENTO (CARTÃO/VR) -->
+    <!-- MODAIS DE PAGAMENTO -->
     <div class="modal-overlay" id="modalPagamentoCartao">
         <div class="modal">
             <button class="modal-close" onclick="fecharModalPagamento('modalPagamentoCartao')">&times;</button>
             <h2><i class="fas fa-credit-card"></i> Dados do Pagamento</h2>
             <p style="text-align: center; color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.9rem;">Ambiente seguro (Simulação)</p>
-            
             <form id="formCartao" class="auth-form">
-                <div class="form-group">
-                    <label>Número do Cartão</label>
-                    <input type="text" placeholder="0000 0000 0000 0000" maxlength="19" required>
-                </div>
-                <div class="form-group">
-                    <label>Nome no Cartão</label>
-                    <input type="text" placeholder="COMO NO CARTAO" required>
-                </div>
+                <div class="form-group"><label>Número do Cartão</label><input type="text" placeholder="0000 0000 0000 0000" maxlength="19" required></div>
+                <div class="form-group"><label>Nome no Cartão</label><input type="text" placeholder="COMO NO CARTAO" required></div>
                 <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    <div class="form-group">
-                        <label>Validade</label>
-                        <input type="text" placeholder="MM/AA" maxlength="5" required>
-                    </div>
-                    <div class="form-group">
-                        <label>CVV</label>
-                        <input type="text" placeholder="123" maxlength="4" required>
-                    </div>
+                    <div class="form-group"><label>Validade</label><input type="text" placeholder="MM/AA" maxlength="5" required></div>
+                    <div class="form-group"><label>CVV</label><input type="text" placeholder="123" maxlength="4" required></div>
                 </div>
-                <button type="submit" class="btn-primary btn-large btn-full">
-                    <i class="fas fa-lock"></i> Pagar com Segurança
-                </button>
+                <button type="submit" class="btn-primary btn-large btn-full"><i class="fas fa-lock"></i> Pagar com Segurança</button>
             </form>
         </div>
     </div>
 
-    <!-- MODAL DE PAGAMENTO (PIX) -->
     <div class="modal-overlay" id="modalPagamentoPix">
         <div class="modal">
             <button class="modal-close" onclick="fecharModalPagamento('modalPagamentoPix')">&times;</button>
             <h2><i class="fas fa-qrcode"></i> Pagamento via PIX</h2>
-            
             <div style="text-align: center; margin: 1.5rem 0;">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=Y2KBite-Pagamento-Ficticio-12345" 
-                     alt="QR Code PIX" 
-                     style="border: 4px solid var(--accent-gold); border-radius: 12px; padding: 8px; background: white;">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=Y2KBite-Pagamento-Ficticio-12345" alt="QR Code PIX" style="border: 4px solid var(--accent-gold); border-radius: 12px; padding: 8px; background: white;">
             </div>
-
             <div class="form-group">
                 <label>Chave PIX (Copia e Cola)</label>
                 <div class="pix-key-container">
@@ -440,37 +362,60 @@
                     <button type="button" class="btn-copy-pix" id="btnCopyModalPix"><i class="fas fa-copy"></i></button>
                 </div>
             </div>
-            <p style="text-align: center; color: var(--text-secondary); font-size: 0.85rem; margin-top: 1rem;">
-                <i class="fas fa-info-circle"></i> O pagamento é confirmado em até 5 segundos.
-            </p>
+            <p style="text-align: center; color: var(--text-secondary); font-size: 0.85rem; margin-top: 1rem;"><i class="fas fa-info-circle"></i> O pagamento é confirmado em até 5 segundos.</p>
         </div>
     </div>
 
-    <!-- MODAL DE PAGAMENTO (DINHEIRO) -->
     <div class="modal-overlay" id="modalPagamentoDinheiro">
         <div class="modal">
             <button class="modal-close" onclick="fecharModalPagamento('modalPagamentoDinheiro')">&times;</button>
             <h2><i class="fas fa-money-bill-wave"></i> Pagamento em Dinheiro</h2>
-            
             <div style="text-align: center; padding: 1rem 0;">
                 <i class="fas fa-hand-holding-usd" style="font-size: 4rem; color: var(--accent-gold); margin-bottom: 1rem;"></i>
-                <p style="color: var(--text-primary); font-size: 1.05rem; line-height: 1.6; margin-bottom: 1rem;">
-                    O pagamento será realizado diretamente com o <strong>entregador</strong> ou no <strong>estabelecimento</strong> no momento da retirada.
-                </p>
-                <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
-                    <i class="fas fa-lightbulb" style="color: var(--accent-gold);"></i> <strong>Dica:</strong> Por favor, tenha o valor exato ou avise sobre o troco necessário na observação do seu pedido.
-                </p>
+                <p style="color: var(--text-primary); font-size: 1.05rem; line-height: 1.6; margin-bottom: 1rem;">O pagamento será realizado diretamente com o <strong>entregador</strong> ou no <strong>estabelecimento</strong> no momento da retirada.</p>
+                <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;"><i class="fas fa-lightbulb" style="color: var(--accent-gold);"></i> <strong>Dica:</strong> Por favor, tenha o valor exato ou avise sobre o troco necessário na observação do seu pedido.</p>
             </div>
-            
-            <button class="btn-primary btn-large btn-full" onclick="fecharModalPagamento('modalPagamentoDinheiro')">
-                <i class="fas fa-check"></i> Entendi
-            </button>
+            <button class="btn-primary btn-large btn-full" onclick="fecharModalPagamento('modalPagamentoDinheiro')"><i class="fas fa-check"></i> Entendi</button>
+        </div>
+    </div>
+
+    <!-- MODAL DE ACOMPANHAMENTO COM MAPA -->
+    <div class="modal-overlay" id="modalAcompanhamento">
+        <div class="modal acompanhamento-modal">
+            <button class="modal-close" onclick="fecharAcompanhamento()">&times;</button>
+            <h2><i class="fas fa-truck"></i> Acompanhe seu Pedido</h2>
+            <p class="pedido-numero" id="pedidoNumero">#Y2K-0000</p>
+            <div id="mapaEntrega" style="height: 250px; width: 100%; border-radius: 12px; margin-bottom: 1.5rem; border: 2px solid var(--border-color); z-index: 1;"></div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <div class="etapas-container">
+                <div class="etapa active" id="etapa1">
+                    <div class="etapa-icon"><i class="fas fa-check-circle"></i></div>
+                    <div class="etapa-info"><h4>Pedido Confirmado</h4><p>Recebemos seu pedido!</p></div>
+                </div>
+                <div class="etapa" id="etapa2">
+                    <div class="etapa-icon"><i class="fas fa-fire"></i></div>
+                    <div class="etapa-info"><h4>Preparando</h4><p>Seu lanche está sendo feito</p></div>
+                </div>
+                <div class="etapa" id="etapa3">
+                    <div class="etapa-icon"><i class="fas fa-motorcycle"></i></div>
+                    <div class="etapa-info"><h4>Saiu para Entrega</h4><p>Motoboy a caminho</p></div>
+                </div>
+                <div class="etapa" id="etapa4">
+                    <div class="etapa-icon"><i class="fas fa-home"></i></div>
+                    <div class="etapa-info"><h4>Entregue</h4><p>Bom apetite! 🍔</p></div>
+                </div>
+            </div>
+            <p class="tempo-estimado" id="tempoEstimado">Tempo estimado: 30-50 min</p>
         </div>
     </div>
 
     <!-- TOAST -->
     <div class="toast" id="toast"></div>
 
+    <!-- LEAFLET JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

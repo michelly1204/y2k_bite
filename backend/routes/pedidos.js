@@ -1,90 +1,60 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../database');
+const verifyToken = require('../middleware/auth');
 
-router.get('/', async (req, res) => {
-    try {
-        const [rows] = await db.query(`
-            SELECT p.*, c.nome as cliente_nome, c.telefone 
-            FROM pedidos p
-            LEFT JOIN clientes c ON p.cliente_id = c.id
-            ORDER BY p.data_pedido DESC
-        `);
-        res.json(rows);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
+// 1. CRIAR UM PEDIDO REAL
+router.post('/', verifyToken, async (req, res) => {
+    const { itens, total, forma_pagamento, endereco_entrega } = req.body;
+    const cliente_id = req.user.id;
+    const itensJSON = JSON.stringify(itens);
 
-router.post('/', async (req, res) => {
-    const connection = await db.getConnection();
-    
     try {
-        await connection.beginTransaction();
-        
-        const { cliente_id, itens, forma_pagamento, endereco_entrega } = req.body;
-        
-        let total = 0;
-        for (const item of itens) {
-            const [produtos] = await connection.query('SELECT preco FROM produtos WHERE id = ?', [item.produto_id]);
-            if (produtos.length === 0) {
-                throw new Error(`Produto ${item.produto_id} não encontrado`);
-            }
-            total += produtos[0].preco * item.quantidade;
-        }
-        
-        const [pedidoResult] = await connection.query(
-            'INSERT INTO pedidos (cliente_id, total, forma_pagamento, endereco_entrega) VALUES (?, ?, ?, ?)',
-            [cliente_id || null, total, forma_pagamento, endereco_entrega]
+        const [result] = await db.query(
+            'INSERT INTO pedidos (cliente_id, total, itens, status, forma_pagamento, endereco_entrega) VALUES (?, ?, ?, ?, ?, ?)',
+            [cliente_id, total, itensJSON, 'confirmado', forma_pagamento || 'cartao', endereco_entrega || '']
         );
         
-        const pedido_id = pedidoResult.insertId;
-        
-        for (const item of itens) {
-            const [produtos] = await connection.query('SELECT preco FROM produtos WHERE id = ?', [item.produto_id]);
-            await connection.query(
-                'INSERT INTO pedido_itens (pedido_id, produto_id, quantidade, preco_unitario) VALUES (?, ?, ?, ?)',
-                [pedido_id, item.produto_id, item.quantidade, produtos[0].preco]
-            );
-        }
-        
-        await connection.commit();
-        
         res.status(201).json({ 
-            message: 'Pedido criado com sucesso',
-            pedido_id: pedido_id,
-            total: total
+            message: 'Pedido criado com sucesso!', 
+            pedidoId: result.insertId, 
+            status: 'confirmado' 
         });
+    } catch (error) {
+        console.error('Erro ao criar pedido:', error);
+        res.status(500).json({ error: 'Erro ao processar o pedido.' });
+    }
+});
+
+// 2. CONSULTAR O STATUS DE UM PEDIDO ESPECÍFICO
+router.get('/:id/status', async (req, res) => {
+    try {
+        const [pedidos] = await db.query(
+            'SELECT id, status FROM pedidos WHERE id = ?', 
+            [req.params.id]
+        );
         
+        if (pedidos.length === 0) {
+            return res.status(404).json({ error: 'Pedido não encontrado.' });
+        }
+
+        res.json({ status: pedidos[0].status });
     } catch (error) {
-        await connection.rollback();
-        res.status(500).json({ error: error.message });
-    } finally {
-        connection.release();
+        console.error('Erro ao buscar status:', error);
+        res.status(500).json({ error: 'Erro ao buscar status do pedido.' });
     }
 });
 
-router.put('/:id/status', async (req, res) => {
+// 3. LISTAR MEUS PEDIDOS
+router.get('/meus', verifyToken, async (req, res) => {
     try {
-        const { status } = req.body;
-        await db.query('UPDATE pedidos SET status = ? WHERE id = ?', [status, req.params.id]);
-        res.json({ message: 'Status atualizado com sucesso' });
+        const [pedidos] = await db.query(
+            'SELECT id, total, status, data_pedido FROM pedidos WHERE cliente_id = ? ORDER BY data_pedido DESC',
+            [req.user.id]
+        );
+        res.json(pedidos);
     } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
-
-router.get('/:id/itens', async (req, res) => {
-    try {
-        const [rows] = await db.query(`
-            SELECT pi.*, p.nome as produto_nome, p.imagem
-            FROM pedido_itens pi
-            JOIN produtos p ON pi.produto_id = p.id
-            WHERE pi.pedido_id = ?
-        `, [req.params.id]);
-        res.json(rows);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: 'Erro ao buscar pedidos.' });
     }
 });
 
